@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Unicorns</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #7f7fd5, #86a8e7, #91eae4);
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 3rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            z-index: 100;
+        }
+        
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: float 30s infinite linear;
+        }
+        
+        .rainbow {
+            position: absolute;
+            font-size: 50px;
+            z-index: 1;
+            transform-origin: left center;
+        }
+        
+        .unicorn {
+            position: absolute;
+            width: 150px;
+            height: 100px;
+            z-index: 10;
+            animation: fly 20s infinite linear;
+        }
+        
+        .unicorn::before {
+            content: "🦄";
+            font-size: 80px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+        
+        .stars {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            box-shadow: 0 0 3px white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        @keyframes fly {
+            0% {
+                transform: translate(-100px, 100px) rotate(20deg);
+            }
+            25% {
+                transform: translate(25vw, 30vh) rotate(0deg);
+            }
+            50% {
+                transform: translate(50vw, 10vh) rotate(-20deg);
+            }
+            75% {
+                transform: translate(75vw, 40vh) rotate(0deg);
+            }
+            100% {
+                transform: translate(100vw, 20vh) rotate(20deg);
+            }
+        }
+        
+        @keyframes float {
+            from {
+                transform: translateX(-100px);
+            }
+            to {
+                transform: translateX(100vw);
+            }
+        }
+        
+        @keyframes twinkle {
+            from {
+                opacity: 0.3;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 1s infinite alternate;
+        }
+        
+        @keyframes sparkle {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.2);
+                opacity: 0.2;
+            }
+        }
+
+        button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+            border-radius: 20px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        
+        button:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateX(-50%) scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Magical Unicorn Kingdom</h1>
+        <div id="unicorns"></div>
+        <button id="add-unicorn">Add More Magic!</button>
+    </div>
+
+    <script>
+        // Create initial clouds
+        function createClouds(num) {
+            const container = document.querySelector('.container');
+            for (let i = 0; i < num; i++) {
+                const cloud = document.createElement('div');
+                cloud.classList.add('cloud');
+                
+                const size = Math.random() * 100 + 50;
+                cloud.style.width = `${size}px`;
+                cloud.style.height = `${size / 2}px`;
+                
+                cloud.style.top = `${Math.random() * 60}%`;
+                cloud.style.left = `${Math.random() * 100}%`;
+                cloud.style.animationDuration = `${Math.random() * 60 + 30}s`;
+                cloud.style.boxShadow = `
+                    ${size * 0.3}px ${size * 0.1}px ${size * 0.7}px ${size * 0.05}px white,
+                    ${-size * 0.3}px ${size * 0.1}px ${size * 0.7}px ${size * 0.05}px white,
+                    0 ${-size * 0.1}px ${size * 0.7}px ${size * 0.05}px white
+                `;
+                
+                container.appendChild(cloud);
+            }
+        }
+        
+        // Create stars
+        function createStars(num) {
+            const container = document.querySelector('.container');
+            for (let i = 0; i < num; i++) {
+                const star = document.createElement('div');
+                star.classList.add('stars');
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                container.appendChild(star);
+            }
+        }
+        
+        // Create unicorns
+        function createUnicorn() {
+            const unicornContainer = document.getElementById('unicorns');
+            const unicorn = document.createElement('div');
+            unicorn.classList.add('unicorn');
+            
+            // Random start position and speed
+            const startY = Math.random() * 70 + 10;
+            unicorn.style.top = `${startY}%`;
+            unicorn.style.animationDuration = `${Math.random() * 15 + 10}s`;
+            unicorn.style.animationDelay = `${Math.random() * -15}s`;
+            
+            // Create emoji rainbow trail
+            const rainbow = document.createElement('div');
+            rainbow.classList.add('rainbow');
+            rainbow.innerHTML = '🌈';
+            rainbow.style.top = '20px';
+            rainbow.style.left = '-60px';
+            
+            // Add random variation to each rainbow
+            const scale = Math.random() * 0.5 + 0.8;
+            rainbow.style.transform = `rotate(${Math.random() * 30 - 15}deg) scale(${scale})`;
+            rainbow.style.opacity = `${Math.random() * 0.2 + 0.8}`;
+            
+            unicorn.appendChild(rainbow);
+            
+            // Create sparkles
+            createSparkles(unicorn, 5);
+            
+            unicornContainer.appendChild(unicorn);
+        }
+        
+        // Create sparkles following unicorn
+        function createSparkles(unicorn, num) {
+            for (let i = 0; i < num; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.style.top = `${Math.random() * 80 + 10}px`;
+                sparkle.style.left = `${Math.random() * 50}px`;
+                sparkle.style.animationDelay = `${Math.random() * 1}s`;
+                unicorn.appendChild(sparkle);
+            }
+        }
+        
+        // Initialize the magical world
+        window.addEventListener('DOMContentLoaded', () => {
+            createClouds(10);
+            createStars(100);
+            // Add initial unicorns
+            for (let i = 0; i < 3; i++) {
+                createUnicorn();
+            }
+            
+            // Add more unicorns on button click
+            document.getElementById('add-unicorn').addEventListener('click', () => {
+                for (let i = 0; i < 2; i++) {
+                    createUnicorn();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
